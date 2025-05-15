@@ -18,3 +18,15 @@
     left:50%;
     transform: translate(-50%,-50%);
 }
+.canva{
+    display:flex;
+    justify-content: center;
+    width:900px;
+    height:700px;
+    border: solid black 2px;
+}
+canvas{
+    border:solid lime 2px;
+    width:700px;
+    height: 600px;
+}
