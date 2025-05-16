@@ -12,9 +12,20 @@
       
     <div class="image-place">
         <div class="input">
-            <input type="file"  multiple ></div>
+          <label class="upload-placeholder" for="fileInput" tabindex="0" role="button" aria-label="Upload file">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M19.35 10.04A7.49 7.49 0 0 0 5.5 10c-2.49 0-4.5 2.11-4.5 4.5S3.01 19 5.5 19H18a4.5 4.5 0 0 0 1.35-8.96zM12 13l-4-4h3V3h2v6h3l-4 4z"/>
+    </svg>
+    <div class="upload-placeholder-text">
+      Select An Image
+    </div>
+    <input type="file" id="fileInput" style="display:none" />
+  </label></div>
         <div class="canva"><canvas class="canvas"></canvas></div>
         <div class="icons"></div>
+    </div>
+    <div class="controls">
+        <button class="select">Select Image</button>
     </div>
     </div>
     

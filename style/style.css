@@ -39,3 +39,41 @@
     width:80px;
     height: 80px;
 }
+ .upload-placeholder {
+      width: 320px;
+      height: 180px;
+      border-radius: 12px;
+      background-color: #f9f9f9;
+      color: #666;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: border-color 0.3s ease, background-color 0.3s ease;
+      user-select: none;
+    }
+    .upload-placeholder:hover {
+      border-color: #4caf50;
+      background-color: #e8f5e9;
+      color: #2e7d32;
+      box-shadow: 0 0 12px #4caf50aa;
+    }
+    .upload-placeholder svg {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 12px;
+      fill: #888;
+      transition: fill 0.3s ease;
+    }
+    .upload-placeholder:hover svg {
+      fill: #4caf50;
+    }
+    .upload-placeholder-text {
+      font-size: 18px;
+      text-align: center;
+    }
+    .hidden{
+        display:none;
+    }

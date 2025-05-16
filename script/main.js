@@ -1,7 +1,20 @@
 const files=document.querySelector("input")
 const canvas=document.querySelector("canvas")
 const icons=document.querySelector(".icons")
-const ctx=canvas.getContext("2d")
+
+const sBtn=document.querySelector(".select")
+const inputB=document.querySelector(".input")
+sBtn.addEventListener("click",(event)=>{
+event.preventDefault()
+toggleSelectBox()
+
+})
+function toggleSelectBox(event){
+  if(event!=undefined){
+event.preventDefault()
+  }
+inputB.classList.toggle("hidden")
+}
 function checkIfImage(files) {
 for (let file of files)
 {
@@ -13,8 +26,11 @@ for (let file of files)
 return true
   
   }
-  files.addEventListener("change", (event) => {
-    const files = event.target.files;
+  function getFile(event){
+    event.preventDefault();
+    event.stopPropagation();
+const files = event.target.files;
+console.log("hello world")
     if(checkIfImage(files)){
     for(let file of files){
     loadImage(file)
@@ -25,7 +41,8 @@ return true
       files=[]
     }
   
-  });
+  }
+files.addEventListener("change", getFile);
 function loadImage(file){
     
     const reader = new FileReader();
@@ -35,8 +52,10 @@ function loadImage(file){
       img.src = e.target.result;
       img.onload = () => {
         console.log("Loading Image")
+        // toggleSelectBox(undefined)
         drawImage(canvas,img)
         showImageIcons(img)
+        toggleSelectBox()
       };
       img.onerror = () => {
         alert("Error loading the image file.");
@@ -70,7 +89,6 @@ function showImageIcons(image){
     icons.insertBefore(lastIcon, clickedNext);
     icons.insertBefore(clickedIcon, lastNext);
     const imageDataURL = clickedIcon.toDataURL();
-      console.log('Image data URL:', imageDataURL);
   const img = new Image();
   img.src = imageDataURL;
   img.onload=()=>{
@@ -88,9 +106,13 @@ function drawImage(canvas,image){
   }
   else{
     const ctx=canvas.getContext("2d")
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    clearCanvas(ctx)
     ctx.drawImage(image,0,0,canvas.width,canvas.height)
   }
 
+  }
+  function clearCanvas(ctx){
+        
+ ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
 
