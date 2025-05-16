@@ -25,8 +25,17 @@
     height:700px;
     border: solid black 2px;
 }
-canvas{
+.canvas{
     border:solid lime 2px;
     width:700px;
     height: 600px;
+}
+.icons{
+    display:flex;
+    flex-direction: row;
+    gap:0.5em;
+}
+.icon{
+    width:80px;
+    height: 80px;
 }
