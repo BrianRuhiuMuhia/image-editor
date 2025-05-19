@@ -52,10 +52,9 @@ function loadImage(file){
       img.src = e.target.result;
       img.onload = () => {
         console.log("Loading Image")
-        // toggleSelectBox(undefined)
+        toggleSelectBox()
         drawImage(canvas,img)
         showImageIcons(img)
-        toggleSelectBox()
       };
       img.onerror = () => {
         alert("Error loading the image file.");

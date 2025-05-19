@@ -26,7 +26,6 @@
     border: solid black 2px;
 }
 .canvas{
-    border:solid lime 2px;
     width:700px;
     height: 600px;
 }
@@ -77,3 +76,16 @@
     .hidden{
         display:none;
     }
+    .control{
+        display:flex;
+        gap:0.5em;
+        flex-direction: column;
+        position:absolute;
+        left:10%;
+        top:10%;
+    }
+  .btn{
+    border:none;
+    width:35px;
+    height: 35px;
+  }
