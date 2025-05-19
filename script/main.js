@@ -8,6 +8,7 @@ const sBtn=document.querySelector(".select")
 const colorBtn=document.querySelector(".color")
 const colorInput=document.querySelector(".color-input")
 const inputB=document.querySelector(".input")
+const undoB=document.querySelector(".undo")
 const canvasStates=[]
 let isImageLoaded=false
 let isDrawing=false
@@ -20,9 +21,9 @@ canvas.addEventListener("mouseup",drawMouseUp)
 canvas.addEventListener("mousedown",(event)=>{
   let color=colorInput.value
 drawMouseDown(event,color)
-console.log(color)
 })
 canvas.addEventListener("mousemove",drawMouseMove)
+undoB.addEventListener("click",undo)
    function drawMouseDown(event,color) {
     if (isImageLoaded && isDrawing) {
       gCtx.beginPath();
@@ -30,18 +31,30 @@ canvas.addEventListener("mousemove",drawMouseMove)
       gCtx.strokeStyle = color||'lime';
       gCtx.lineCap = 'round';
       gCtx.lineWidth = 2;
+      canvasStates.push(gCtx.getImageData(0, 0, canvas.width, canvas.height));
     }
+  }
+  function undo(){
+    if(canvasStates.length<=0)
+    {
+      console.log("length of canvasstates <= 0")
+      return
+    }
+    const imageData=canvasStates.pop()
+    gCtx.putImageData(imageData,0,0)
+
   }
   function drawMouseMove(event) {
     if (isImageLoaded && isDrawing) {
       gCtx.lineTo(event.offsetX, event.offsetY);
       gCtx.stroke();
+     
     }
   }
   function drawMouseUp(event) {
     if (isImageLoaded && isDrawing) {
-      canvasStates.push(gCtx.getImageData(0, 0, canvas.width, canvas.height));
       gCtx.closePath();
+      canvasStates.push(gCtx.getImageData(0, 0, canvas.width, canvas.height));
     }
   }
 function toggleSelectBox(event){
@@ -98,6 +111,7 @@ function loadImage(file){
         toggleSelectBox()
         drawImage(canvas,img)
         showImageIcons(img)
+        canvasStates.push(gCtx.getImageData(0, 0, canvas.width, canvas.height));
         isImageLoaded=true
       };
       img.onerror = () => {
@@ -132,11 +146,7 @@ function showImageIcons(image){
     icons.insertBefore(lastIcon, clickedNext);
     icons.insertBefore(clickedIcon, lastNext);
     const imageDataURL = clickedIcon.toDataURL();
-  const img = new Image();
-  img.src = imageDataURL;
-  img.onload=()=>{
-    reDrawCanvas(img)
-  }
+  
   }
 
 icons.addEventListener("click",changePos)
