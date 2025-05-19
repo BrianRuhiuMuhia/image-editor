@@ -1,14 +1,49 @@
 const files=document.querySelector("input")
 const canvas=document.querySelector("canvas")
+canvas.width=800
+canvas.height=600
+const gCtx=canvas.getContext("2d")
 const icons=document.querySelector(".icons")
-
 const sBtn=document.querySelector(".select")
+const colorBtn=document.querySelector(".color")
+const colorInput=document.querySelector(".color-input")
 const inputB=document.querySelector(".input")
+const canvasStates=[]
+let isImageLoaded=false
+let isDrawing=false
 sBtn.addEventListener("click",(event)=>{
 event.preventDefault()
 toggleSelectBox()
 
 })
+canvas.addEventListener("mouseup",drawMouseUp)
+canvas.addEventListener("mousedown",(event)=>{
+  let color=colorInput.value
+drawMouseDown(event,color)
+console.log(color)
+})
+canvas.addEventListener("mousemove",drawMouseMove)
+   function drawMouseDown(event,color) {
+    if (isImageLoaded && isDrawing) {
+      gCtx.beginPath();
+      gCtx.moveTo(event.offsetX, event.offsetY);
+      gCtx.strokeStyle = color||'lime';
+      gCtx.lineCap = 'round';
+      gCtx.lineWidth = 2;
+    }
+  }
+  function drawMouseMove(event) {
+    if (isImageLoaded && isDrawing) {
+      gCtx.lineTo(event.offsetX, event.offsetY);
+      gCtx.stroke();
+    }
+  }
+  function drawMouseUp(event) {
+    if (isImageLoaded && isDrawing) {
+      canvasStates.push(gCtx.getImageData(0, 0, canvas.width, canvas.height));
+      gCtx.closePath();
+    }
+  }
 function toggleSelectBox(event){
   if(event!=undefined){
 event.preventDefault()
@@ -30,7 +65,6 @@ return true
     event.preventDefault();
     event.stopPropagation();
 const files = event.target.files;
-console.log("hello world")
     if(checkIfImage(files)){
     for(let file of files){
     loadImage(file)
@@ -41,6 +75,15 @@ console.log("hello world")
       files=[]
     }
   
+  }
+  colorBtn.addEventListener("click",startDrawing)
+  function startDrawing()
+  {
+ isDrawing=isDrawing===true ? false:true
+canvas.classList.toggle("drawing")
+colorInput.classList.toggle("hidden")
+console.log(isDrawing)
+
   }
 files.addEventListener("change", getFile);
 function loadImage(file){
@@ -55,6 +98,7 @@ function loadImage(file){
         toggleSelectBox()
         drawImage(canvas,img)
         showImageIcons(img)
+        isImageLoaded=true
       };
       img.onerror = () => {
         alert("Error loading the image file.");

@@ -26,8 +26,7 @@
     border: solid black 2px;
 }
 .canvas{
-    width:700px;
-    height: 600px;
+  
 }
 .icons{
     display:flex;
@@ -88,4 +87,7 @@
     border:none;
     width:35px;
     height: 35px;
+  }
+  .drawing{
+    cursor: crosshair;
   }
