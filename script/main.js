@@ -9,6 +9,7 @@ const colorBtn=document.querySelector(".color")
 const colorInput=document.querySelector(".color-input")
 const inputB=document.querySelector(".input")
 const undoB=document.querySelector(".undo")
+const downloadB=document.querySelector(".download")
 const canvasStates=[]
 let isImageLoaded=false
 let isDrawing=false
@@ -18,6 +19,7 @@ toggleSelectBox()
 
 })
 canvas.addEventListener("mouseup",drawMouseUp)
+downloadB.addEventListener("click",downloadCanvasImage)
 canvas.addEventListener("mousedown",(event)=>{
   let color=colorInput.value
 drawMouseDown(event,color)
@@ -34,6 +36,20 @@ undoB.addEventListener("click",undo)
       canvasStates.push(gCtx.getImageData(0, 0, canvas.width, canvas.height));
     }
   }
+  function downloadCanvasImage(){
+    console.log("downloading")
+    if(isImageLoaded){
+         const dataURL = canvas.toDataURL('image/png');
+    const link = document.createElement('a');
+    link.href = dataURL;
+    link.download = `${genRandomImageName()}`; 
+    document.body.appendChild(link);
+    link.click(); 
+    document.body.removeChild(link); 
+    } 
+ 
+  }
+  
   function undo(){
     if(canvasStates.length<=0)
     {
@@ -167,5 +183,8 @@ function drawImage(canvas,image){
   function clearCanvas(ctx){
         
  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+  function genRandomImageName(){
+    return Math.random().toString(36).substr(2, 9);
   }
 
