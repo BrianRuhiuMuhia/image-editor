@@ -22,6 +22,7 @@ canvas.addEventListener("mouseup",drawMouseUp)
 downloadB.addEventListener("click",downloadCanvasImage)
 canvas.addEventListener("mousedown",(event)=>{
   let color=colorInput.value
+  isDrawing=true
 drawMouseDown(event,color)
 })
 canvas.addEventListener("mousemove",drawMouseMove)
@@ -68,7 +69,8 @@ undoB.addEventListener("click",undo)
     }
   }
   function drawMouseUp(event) {
-    if (isImageLoaded && isDrawing) {
+    isDrawing=false
+    if (isImageLoaded) {
       gCtx.closePath();
       canvasStates.push(gCtx.getImageData(0, 0, canvas.width, canvas.height));
     }
@@ -108,7 +110,7 @@ const files = event.target.files;
   colorBtn.addEventListener("click",startDrawing)
   function startDrawing()
   {
- isDrawing=isDrawing===true ? false:true
+//  isDrawing=isDrawing===true ? false:true
 canvas.classList.toggle("drawing")
 colorInput.classList.toggle("hidden")
 console.log(isDrawing)
