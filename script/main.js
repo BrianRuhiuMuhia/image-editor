@@ -10,6 +10,8 @@ const colorInput=document.querySelector(".color-input")
 const inputB=document.querySelector(".input")
 const undoB=document.querySelector(".undo")
 const downloadB=document.querySelector(".download")
+const rangeInput=document.querySelector(".range")
+const rangeBtn=document.querySelector(".light-btn")
 const canvasStates=[]
 let isImageLoaded=false
 let isDrawing=false
@@ -18,6 +20,30 @@ event.preventDefault()
 toggleSelectBox()
 
 })
+rangeBtn.addEventListener("click",rangeBtnFunc)
+let inputValues={"current":null,"previous":null} 
+rangeInput.addEventListener("input",(event)=>{
+  if(isImageLoaded){
+      inputValues["previous"]=inputValues["current"]
+  inputValues["current"]=parseInt(event.target.value)
+  let dir=checkDirection(inputValues) ? 1:-1
+  const magnitude=1
+  changeImageBrightness(magnitude,dir)
+  }
+  else{
+    alert("Please load an image first")
+    return
+  }
+
+})
+function checkDirection(obj)
+{
+  if(obj["current"]>obj["previous"])
+    return true
+  else if(obj["current"]<obj["previous"])
+    return false
+  else return null
+}
 canvas.addEventListener("mouseup",drawMouseUp)
 downloadB.addEventListener("click",downloadCanvasImage)
 canvas.addEventListener("mousedown",(event)=>{
@@ -37,6 +63,10 @@ undoB.addEventListener("click",undo)
       canvasStates.push(gCtx.getImageData(0, 0, canvas.width, canvas.height));
     }
   }
+  function rangeBtnFunc(){
+    rangeInput.classList.toggle("hidden")
+    console.log("hello World")
+  }
   function downloadCanvasImage(){
     console.log("downloading")
     if(isImageLoaded){
@@ -52,9 +82,9 @@ undoB.addEventListener("click",undo)
   }
   
   function undo(){
-    if(canvasStates.length<=0)
+    if(canvasStates.length<=1)
     {
-      console.log("length of canvasstates <= 0")
+      console.log("length of canvasstates <= 1")
       return
     }
     const imageData=canvasStates.pop()
@@ -110,11 +140,8 @@ const files = event.target.files;
   colorBtn.addEventListener("click",startDrawing)
   function startDrawing()
   {
-//  isDrawing=isDrawing===true ? false:true
 canvas.classList.toggle("drawing")
 colorInput.classList.toggle("hidden")
-console.log(isDrawing)
-
   }
 files.addEventListener("change", getFile);
 function loadImage(file){
@@ -142,7 +169,20 @@ function loadImage(file){
     reader.readAsDataURL(file);
     
   } 
-
+function changeImageBrightness(value,dir)
+{
+  const image=gCtx.getImageData(0,0,canvas.width,canvas.height)
+  const imageData=image.data
+  for(let i=0;i<imageData.length;i++){
+imageData[i]+=value*dir
+imageData[i+1]+=value*dir
+imageData[i+2]+=value*dir
+  }
+const newImageData = new ImageData(imageData, image.width, image.height);
+  gCtx.putImageData(newImageData, 0, 0)
+  image.src = canvas.toDataURL();
+  canvasStates.push(gCtx.getImageData(0, 0, canvas.width, canvas.height));
+}
 function showImageIcons(image){
     let canv=document.createElement("canvas")
     icons.append(canv)
