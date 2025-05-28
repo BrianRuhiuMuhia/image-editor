@@ -91,3 +91,21 @@
   .drawing{
     cursor: crosshair;
   }
+  .btn:hover{
+    transform:scale(1.1);
+    background-color: lime;
+    position: cursor;
+  }
+  .display{
+    display: block;
+  }
+  .btn-container{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    gap:0.5em;
+
+  }
+  .span{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  }

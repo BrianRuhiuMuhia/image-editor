@@ -12,9 +12,11 @@ const undoB=document.querySelector(".undo")
 const downloadB=document.querySelector(".download")
 const rangeInput=document.querySelector(".range")
 const rangeBtn=document.querySelector(".light-btn")
+const buttonContainer=document.querySelectorAll(".btn-container")
 const canvasStates=[]
 let isImageLoaded=false
 let isDrawing=false
+let checkDrawing=false
 sBtn.addEventListener("click",(event)=>{
 event.preventDefault()
 toggleSelectBox()
@@ -23,6 +25,7 @@ toggleSelectBox()
 rangeBtn.addEventListener("click",rangeBtnFunc)
 let inputValues={"current":null,"previous":null} 
 rangeInput.addEventListener("input",(event)=>{
+  
   if(isImageLoaded){
       inputValues["previous"]=inputValues["current"]
   inputValues["current"]=parseInt(event.target.value)
@@ -34,6 +37,16 @@ rangeInput.addEventListener("input",(event)=>{
     alert("Please load an image first")
     return
   }
+
+})
+buttonContainer.forEach((container)=>{
+  const span=container.querySelector("span")
+  container.addEventListener("mouseover",()=>{
+    span.classList.replace("hidden","display")
+  })
+  container.addEventListener("mouseleave",()=>{
+    span.classList.replace("display","hidden")
+  })
 
 })
 function checkDirection(obj)
@@ -48,13 +61,13 @@ canvas.addEventListener("mouseup",drawMouseUp)
 downloadB.addEventListener("click",downloadCanvasImage)
 canvas.addEventListener("mousedown",(event)=>{
   let color=colorInput.value
-  isDrawing=true
 drawMouseDown(event,color)
 })
 canvas.addEventListener("mousemove",drawMouseMove)
 undoB.addEventListener("click",undo)
    function drawMouseDown(event,color) {
-    if (isImageLoaded && isDrawing) {
+    checkDrawing=true
+    if (isImageLoaded && isDrawing && checkDrawing) {
       gCtx.beginPath();
       gCtx.moveTo(event.offsetX, event.offsetY);
       gCtx.strokeStyle = color||'lime';
@@ -65,10 +78,11 @@ undoB.addEventListener("click",undo)
   }
   function rangeBtnFunc(){
     rangeInput.classList.toggle("hidden")
-    console.log("hello World")
+    checkDrawing=false
   }
   function downloadCanvasImage(){
     console.log("downloading")
+    checkDrawing=false
     if(isImageLoaded){
          const dataURL = canvas.toDataURL('image/png');
     const link = document.createElement('a');
@@ -92,18 +106,18 @@ undoB.addEventListener("click",undo)
 
   }
   function drawMouseMove(event) {
-    if (isImageLoaded && isDrawing) {
+    if (isImageLoaded && isDrawing && checkDrawing) {
       gCtx.lineTo(event.offsetX, event.offsetY);
       gCtx.stroke();
      
     }
   }
   function drawMouseUp(event) {
-    isDrawing=false
-    if (isImageLoaded) {
+    if (isImageLoaded && isDrawing &&checkDrawing) {
       gCtx.closePath();
       canvasStates.push(gCtx.getImageData(0, 0, canvas.width, canvas.height));
     }
+    checkDrawing=false
   }
 function toggleSelectBox(event){
   if(event!=undefined){
@@ -142,6 +156,7 @@ const files = event.target.files;
   {
 canvas.classList.toggle("drawing")
 colorInput.classList.toggle("hidden")
+isDrawing=true
   }
 files.addEventListener("change", getFile);
 function loadImage(file){
