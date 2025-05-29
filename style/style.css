@@ -85,8 +85,8 @@
     }
   .btn{
     border:none;
-    width:35px;
-    height: 35px;
+    width:50px;
+    height: 40px;
   }
   .drawing{
     cursor: crosshair;
@@ -94,7 +94,7 @@
   .btn:hover{
     transform:scale(1.1);
     background-color: lime;
-    position: cursor;
+  cursor: pointer;
   }
   .display{
     display: block;
